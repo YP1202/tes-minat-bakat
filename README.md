@@ -1,2 +1,2 @@
 # tes-minat-bakat
-Kumpulan soal minat dan bakat untuk sistem pakar"
+Kumpulan soal minat dan bakat untuk sistem pakar
