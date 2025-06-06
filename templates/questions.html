@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pakar - Pertanyaan</title>
+</head>
+<body>
+    <h1>Selamat Datang, {{ name }}</h1>
+    <p>Usia: {{ age }}</p>
+    <form method="post">
+        {% for item in data %}
+        <p>{{ item['id'] }}. {{ item['statement'] }}</p>
+        <label for="question_{{ item['id'] }}">Jawaban (1-5):</label>
+        <input type="number" id="question_{{ item['id'] }}" name="question_{{ item['id'] }}" min="1" max="5" required><br><br>
+        {% endfor %}
+        <button type="submit">Selesai</button>
+    </form>
+</body>
+</html>
