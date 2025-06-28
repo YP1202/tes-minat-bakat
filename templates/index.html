@@ -1,83 +1,43 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sistem Pakar - Identitas</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to right, #e0f7fa, #80deea);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .form-container {
-      background-color: #ffffff;
-      padding: 40px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 420px;
-    }
-
-    h1 {
-      text-align: center;
-      color: #006064;
-      margin-bottom: 32px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      color: #333;
-      font-weight: 600;
-    }
-
-    input[type="text"],
-    input[type="number"] {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 24px;
-      border: 2px solid #b2ebf2;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #00acc1;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #007c91;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Datang</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url('/static/images/backgroud.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 400px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .btn {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+        }
+    </style>
 </head>
 <body>
-  <div class="form-container">
-    <h1>Selamat Datang</h1>
-    <form method="post">
-      <label for="name">Nama:</label>
-      <input type="text" id="name" name="name" required>
-
-      <label for="age">Usia:</label>
-      <input type="number" id="age" name="age" required>
-
-      <button type="submit">Mulai Tes</button>
-    </form>
-  </div>
+    <div class="container">
+        <h1>Selamat Datang</h1>
+        <p>Ikuti tes minat dan bakat untuk mengetahui potensi terbaik Anda.</p>
+        <a href="/questions" class="btn btn-primary">Mulai Tes</a>
+    </div>
 </body>
 </html>
