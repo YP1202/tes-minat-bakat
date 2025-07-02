@@ -1,4 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
+import json
+from urllib.parse import quote, unquote
 
 app = Flask(__name__)
 
@@ -18,12 +20,10 @@ data = [
 
 @app.route('/')
 def home():
-    """Halaman utama."""
     return render_template('index.html')
 
 @app.route('/questions', methods=['GET', 'POST'])
 def questions():
-    """Halaman pertanyaan."""
     if request.method == 'POST':
         scores = {}
         for question in data:
@@ -32,26 +32,92 @@ def questions():
             category = question['category']
             scores[category] = scores.get(category, 0) + response
 
-        # Redirect ke halaman hasil dengan skor sebagai parameter
-        return redirect(url_for('result', scores=scores))
+        # Encode skor ke dalam format JSON dan quote agar aman di URL
+        scores_json = quote(json.dumps(scores))
+        return redirect(url_for('results', scores=scores_json))
+
     return render_template('questions.html', data=data)
 
 @app.route('/result')
 def results():
-    """Halaman hasil."""
-    scores = request.args.get('scores', {})
-    if isinstance(scores, str):
-        # Ubah dari string JSON-like ke dict
-        import ast
-        scores = ast.literal_eval(scores)
+    # Decode skor dari URL
+    scores_raw = request.args.get('scores', '{}')
+    scores = json.loads(unquote(scores_raw))
 
-    # Temukan kategori dengan skor tertinggi
     max_category = max(scores, key=scores.get)
+
     result_message = (
         f"Berdasarkan hasil analisis, Anda memiliki kecenderungan dominan "
         f"pada kategori '{max_category}'. Anda memiliki potensi besar untuk mengembangkan kemampuan di bidang ini."
     )
-    return render_template('result.html', scores=scores, result_message=result_message)
+
+    # Rekomendasi berdasarkan kategori minat
+    rekomendasi_data = {
+        "Realistic": {
+            "jurusan": ["Teknik Mesin", "Teknik Elektro", "Teknik Sipil"],
+            "bakat": ["Mekanik", "Instalasi Listrik", "Pertukangan"],
+            "saran": "Ikuti pelatihan teknis atau praktek kerja lapangan untuk mengasah keterampilanmu."
+        },
+        "Investigative": {
+            "jurusan": ["Fisika", "Biologi", "Teknik Kimia"],
+            "bakat": ["Penelitian", "Eksperimen", "Logika"],
+            "saran": "Mulailah dengan eksperimen kecil di rumah atau klub sains sekolah/kampus."
+        },
+        "Artistic": {
+            "jurusan": ["DKV", "Seni Musik", "Seni Tari"],
+            "bakat": ["Kreativitas", "Ekspresi Diri", "Seni Visual"],
+            "saran": "Tunjukkan karyamu di media sosial dan ikut komunitas kreatif."
+        },
+        "Social": {
+            "jurusan": ["Psikologi", "Pendidikan", "Bimbingan Konseling"],
+            "bakat": ["Empati", "Komunikasi", "Kerja Sosial"],
+            "saran": "Coba ikut kegiatan sosial atau komunitas relawan."
+        },
+        "Enterprising": {
+            "jurusan": ["Manajemen", "Bisnis", "Marketing"],
+            "bakat": ["Kepemimpinan", "Negosiasi", "Public Speaking"],
+            "saran": "Mulailah bisnis kecil-kecilan atau ikut organisasi."
+        },
+        "Conventional": {
+            "jurusan": ["Administrasi", "Akuntansi", "Perpajakan"],
+            "bakat": ["Ketelitian", "Rapi", "Terstruktur"],
+            "saran": "Latih kemampuan pengelolaan dokumen dan data di Excel atau software keuangan."
+        },
+        "Linguistic": {
+            "jurusan": ["Sastra", "Jurnalistik", "Pendidikan Bahasa"],
+            "bakat": ["Menulis", "Berbicara", "Bahasa Asing"],
+            "saran": "Tulis blog, puisi, atau cerpen dan ikut lomba literasi."
+        },
+        "Logical-Mathematical": {
+            "jurusan": ["Matematika", "Statistik", "Ilmu Komputer"],
+            "bakat": ["Analisis", "Pemecahan Masalah", "Berpikir Kritis"],
+            "saran": "Belajar coding atau ikut olimpiade matematika."
+        },
+        "Spatial": {
+            "jurusan": ["Arsitektur", "Desain Interior", "Geografi"],
+            "bakat": ["Membaca Peta", "Visualisasi", "Orientasi Ruang"],
+            "saran": "Coba aplikasi desain rumah atau ikuti kelas arsitektur."
+        },
+        "Bodily-Kinesthetic": {
+            "jurusan": ["Pendidikan Jasmani", "Tari", "Kinesiologi"],
+            "bakat": ["Koordinasi Tubuh", "Kekuatan Fisik", "Gerak"],
+            "saran": "Gabung tim olahraga atau ikut kelas tari."
+        }
+    }
+
+    recommendation = rekomendasi_data.get(max_category, {
+        "jurusan": [],
+        "bakat": [],
+        "saran": "Belum ada saran spesifik untuk kategori ini."
+    })
+
+    return render_template(
+        'result.html',
+        scores=scores,
+        result_message=result_message,
+        max_category=max_category,
+        recommendation=recommendation
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)

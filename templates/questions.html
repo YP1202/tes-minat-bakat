@@ -1,129 +1,162 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kuisioner Interaktif</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
     <style>
-        body {
-            background: linear-gradient(to bottom, #8e2de2, #4a00e0);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 16px;
-            text-align: center;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            color: #333;
-            max-width: 600px;
-            width: 100%;
-        }
-        h1 {
-            color: #6a11cb;
-            margin-bottom: 20px;
-        }
-        .question {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .question.active {
-            display: flex;
-        }
-        .likert-scale {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-        }
-        .likert-scale label {
-            font-size: 2rem;
-            cursor: pointer;
-            transition: transform 0.2s, color 0.3s;
-        }
-        .likert-scale input {
-            display: none;
-        }
-        .likert-scale input:checked + label {
-            color: #6a11cb;
-            transform: scale(1.2);
-        }
-        .progress-bar {
-            height: 10px;
-            background-color: #6a11cb;
-            transition: width 0.3s ease;
-        }
-        .btn {
-            margin-top: 20px;
-        }
+      body {
+        background: linear-gradient(to bottom, #8e2de2, #4a00e0);
+        color: white;
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 30px;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        color: #333;
+        max-width: 600px;
+        width: 100%;
+      }
+      h1 {
+        color: #6a11cb;
+        margin-bottom: 20px;
+      }
+      .question {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .question.active {
+        display: flex;
+      }
+      .likert-scale {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+      }
+      .likert-scale label {
+        font-size: 2rem;
+        cursor: pointer;
+        transition: transform 0.2s, color 0.3s;
+      }
+      .likert-scale input {
+        display: none;
+      }
+      .likert-scale input:checked + label {
+        color: #6a11cb;
+        transform: scale(1.2);
+      }
+      .progress-bar {
+        height: 10px;
+        background-color: #6a11cb;
+        transition: width 0.3s ease;
+      }
+      .btn {
+        margin-top: 20px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>Kuisioner Interaktif</h1>
-        <div class="progress mb-3">
-            <div class="progress-bar" role="progressbar" style="width: 0%;"></div>
-        </div>
-        <form id="quiz-form" method="POST">
-            {% for item in data %}
-            <div class="question" id="question-{{ item.id }}">
-                <p><strong>{{ item.id }}. {{ item.statement }}</strong></p>
-                <div class="likert-scale">
-                    {% for i, emoji in [(1, "😡"), (2, "😐"), (3, "😊"), (4, "😃"), (5, "🤩")] %}
-                    <input type="radio" id="q{{ item.id }}_{{ i }}" name="question_{{ item.id }}" value="{{ i }}" required>
-                    <label for="q{{ item.id }}_{{ i }}">{{ emoji }}</label>
-                    {% endfor %}
-                </div>
-            </div>
+      <h1>Kuisioner Interaktif</h1>
+      <div class="progress mb-3">
+        <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+      </div>
+      <form id="quiz-form" method="POST">
+        {% for item in data %}
+        <div class="question" id="question-{{ item.id }}">
+          <p><strong>{{ item.id }}. {{ item.statement }}</strong></p>
+          <div class="likert-scale">
+            {% for i, emoji in [(1, "😡"), (2, "😐"), (3, "😊"), (4, "😃"), (5,
+            "🤩")] %}
+            <input
+              type="radio"
+              id="q{{ item.id }}_{{ i }}"
+              name="question_{{ item.id }}"
+              value="{{ i }}"
+              required
+            />
+            <label for="q{{ item.id }}_{{ i }}">{{ emoji }}</label>
             {% endfor %}
-            <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-secondary" id="prev-btn" disabled>Previous</button>
-                <button type="button" class="btn btn-primary" id="next-btn">Next</button>
-            </div>
-            <button type="submit" class="btn btn-success mt-3 d-none" id="submit-btn">Selesai</button>
-        </form>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="d-flex justify-content-between">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            id="prev-btn"
+            disabled
+          >
+            Previous
+          </button>
+          <button type="button" class="btn btn-primary" id="next-btn">
+            Next
+          </button>
+        </div>
+        <button
+          type="submit"
+          class="btn btn-success mt-3 d-none"
+          id="submit-btn"
+        >
+          Selesai
+        </button>
+      </form>
     </div>
 
     <script>
-        const questions = document.querySelectorAll('.question');
-        const progressBar = document.querySelector('.progress-bar');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const submitBtn = document.getElementById('submit-btn');
-        const totalQuestions = questions.length;
-        let currentQuestion = 0;
+      const questions = document.querySelectorAll(".question");
+      const progressBar = document.querySelector(".progress-bar");
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
+      const submitBtn = document.getElementById("submit-btn");
+      const totalQuestions = questions.length;
+      let currentQuestion = 0;
 
-        const updateUI = () => {
-            questions.forEach((q, idx) => {
-                q.classList.toggle('active', idx === currentQuestion);
-            });
-            progressBar.style.width = `${((currentQuestion + 1) / totalQuestions) * 100}%`;
-            prevBtn.disabled = currentQuestion === 0;
-            nextBtn.classList.toggle('d-none', currentQuestion === totalQuestions - 1);
-            submitBtn.classList.toggle('d-none', currentQuestion !== totalQuestions - 1);
-        };
-
-        prevBtn.addEventListener('click', () => {
-            if (currentQuestion > 0) {
-                currentQuestion--;
-                updateUI();
-            }
+      const updateUI = () => {
+        questions.forEach((q, idx) => {
+          q.classList.toggle("active", idx === currentQuestion);
         });
+        progressBar.style.width = `${
+          ((currentQuestion + 1) / totalQuestions) * 100
+        }%`;
+        prevBtn.disabled = currentQuestion === 0;
+        nextBtn.classList.toggle(
+          "d-none",
+          currentQuestion === totalQuestions - 1
+        );
+        submitBtn.classList.toggle(
+          "d-none",
+          currentQuestion !== totalQuestions - 1
+        );
+      };
 
-        nextBtn.addEventListener('click', () => {
-            if (currentQuestion < totalQuestions - 1) {
-                currentQuestion++;
-                updateUI();
-            }
-        });
+      prevBtn.addEventListener("click", () => {
+        if (currentQuestion > 0) {
+          currentQuestion--;
+          updateUI();
+        }
+      });
 
-        updateUI();
+      nextBtn.addEventListener("click", () => {
+        if (currentQuestion < totalQuestions - 1) {
+          currentQuestion++;
+          updateUI();
+        }
+      });
+
+      updateUI();
     </script>
-</body>
+  </body>
 </html>
